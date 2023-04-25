@@ -1,0 +1,34 @@
+<!-- Copyright (c) Microsoft Corporation and Contributors. -->
+<!-- Licensed under the MIT License. -->
+
+<Window 
+    x:Class="Type.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+        <TextBox x:Name="TextBox2" 
+                 AcceptsReturn="True" 
+                 TextChanged="TextBox_OnTextChanged" 
+                 LostFocus="TextBox2_OnLostFocus" 
+                 Opacity="0"
+                 Width="1"
+                 Paste="TextBox2_Paste" />
+        <TextBlock x:Name="Timer" TextAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock x:Name="TextBlock" Width="700" TextWrapping="Wrap" FontSize="20"  />
+        
+        <TextBlock Name="Author" Foreground="Gray" Margin="0 10 0 0"/>
+        <AppBarButton Icon="Refresh" HorizontalAlignment="Center" Click="ButtonBase_OnClick" Foreground="LightGray" VerticalAlignment="Center">
+            <AppBarButton.KeyboardAccelerators>
+                <KeyboardAccelerator Modifiers="Control" Key="R"/>
+            </AppBarButton.KeyboardAccelerators>
+        </AppBarButton>
+        
+        <Grid x:Name="AppTitleBar"  Height="25" >
+        </Grid>
+    </StackPanel>
+</Window>
