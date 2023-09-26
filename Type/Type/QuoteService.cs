@@ -15,7 +15,8 @@ public class QuoteService
 {
 	private static HttpClient _httpClient = new();
 	private static int _rng = -1;
-	private static List<Quote> _quotes ;
+	//private static List<Quote> _quotes ;
+	private static Stack<Quote> _stackQuotes;
 	public static bool CheckForInternetConnection(int timeoutMs = 10000, string url = null)
 	{
 		try
@@ -43,31 +44,40 @@ public class QuoteService
 	}
 	public static async Task GetQuotes()
 	{
-		if (_quotes == null)
+		if (_stackQuotes == null)
 		{
 			if (CheckForInternetConnection())
 			{
-				_quotes = new List<Quote>();
+				var _quotes = new List<Quote>();
+				_stackQuotes = new Stack<Quote>();
 				for (var i = 0; i < 3; i++)
 				{
 					var res = await _httpClient.GetAsync("https://zenquotes.io/api/quotes");
 					var quotes = await res.Content.ReadFromJsonAsync<List<Quote>>();
 					_quotes!.AddRange(quotes!);
+					
 				}
+				_stackQuotes = new Stack<Quote>(_quotes);
 			}
 			else
 			{
 				var path = Windows.ApplicationModel.Package.Current.InstalledPath + "\\quotes.json";
 				var json = File.ReadAllText(path);
-				_quotes = JsonSerializer.Deserialize<List<Quote>>(json);
+				//_quotes = JsonSerializer.Deserialize<List<Quote>>(json);
+				_stackQuotes = JsonSerializer.Deserialize<Stack<Quote>>(json);
 			}
 		}
 	}
-	public static Quote GetQuote()
+	public static async Task<Quote> GetQuote()
 	{
+		
+		// use stack
+		var qu = new Stack<Quote>();
+		
 		//var path = Windows.ApplicationModel.Package.Current.InstalledPath + "\\quotes.json";
 		//var json = File.ReadAllText(path);
 		//var res = JsonSerializer.Deserialize<Quotes>(json);
+		/*
 		var rnd = new Random();
 		var num = rnd.Next(0, _quotes.Count);
 		while (_rng == num)
@@ -75,7 +85,10 @@ public class QuoteService
 			num = rnd.Next(0, _quotes.Count);
 		}
 		_rng = num;
-		return _quotes[num];
+		return _quotes[num];*/
+		if (_stackQuotes.Count == 0)
+			await GetQuotes();
+		return _stackQuotes.Pop();
 	}
 }
 

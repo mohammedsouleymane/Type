@@ -118,17 +118,17 @@ public sealed partial class MainWindow : Window
 			CloseButtonText = "Done"
 		};
 		await dialog.ShowAsync();
-		Start();
+		await Start();
 		_done = false;
 	}
 
 	private string _text;
 	private string _author;
-	private void Start()
+	private async Task Start()
 	{
 		Timer.Text = "";
 		TextBox2.Text = "";
-		var quote = QuoteService.GetQuote();
+		var quote = await QuoteService.GetQuote();
 
 		_text = quote.quote.Trim();
 		TextBox2.MaxLength = _text.Length;
@@ -139,9 +139,9 @@ public sealed partial class MainWindow : Window
 		TextBox2.Focus(FocusState.Keyboard);
 	}
 
-	private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+	private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
 	{
-		Start();
+		await Start();
 	}
 
 	private void TextBox2_Paste(object sender, TextControlPasteEventArgs e)
